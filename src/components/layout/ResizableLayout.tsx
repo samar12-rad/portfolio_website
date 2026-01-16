@@ -1,7 +1,18 @@
 'use client';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
-const ResizableLayout = ({ children }: { children: React.ReactNode }) => {
+// Start: Mock sidebar logic for now, or real sidebar
+import Sidebar from '../vscode/Sidebar';
+
+interface ResizableLayoutProps {
+    children: React.ReactNode;
+    isMobile?: boolean;
+    sidebarOpen?: boolean;
+    onSidebarClose?: () => void;
+}
+
+const ResizableLayout = ({ children, isMobile = false, sidebarOpen = true, onSidebarClose }: ResizableLayoutProps) => {
     const [sidebarWidth, setSidebarWidth] = useState(240); // Initial width
     const [isResizing, setIsResizing] = useState(false);
     const sidebarRef = useRef<HTMLDivElement>(null);
@@ -24,61 +35,70 @@ const ResizableLayout = ({ children }: { children: React.ReactNode }) => {
     );
 
     useEffect(() => {
-        window.addEventListener("mousemove", resize);
-        window.addEventListener("mouseup", stopResizing);
-        return () => {
-            window.removeEventListener("mousemove", resize);
-            window.removeEventListener("mouseup", stopResizing);
-        };
-    }, [resize, stopResizing]);
+        if (!isMobile) {
+            window.addEventListener("mousemove", resize);
+            window.addEventListener("mouseup", stopResizing);
+            return () => {
+                window.removeEventListener("mousemove", resize);
+                window.removeEventListener("mouseup", stopResizing);
+            };
+        }
+    }, [resize, stopResizing, isMobile]);
 
-    // Sidebar Component (Mock import or use children if we passed sidebar as prop, but here we hardcode Sidebar component inside)
-    // Actually, MainLayout expects this wrapper to contain ONLY the editor area, 
-    // and Sidebar is a sibling in the flex container in MainLayout.
-    // Wait, my MainLayout Usage:
-    // <ResizableLayout> {Editor} </ResizableLayout>
-    // AND Sidebar was sitting OUTSIDE. 
-    // The Previous MainLayout had:
-    // <ActivityBar />
-    // <ResizableLayout> ... </ResizableLayout>
-    // And ResizableLayout contained BOTH Sidebar and Editor in the previous lib version.
-
-    // So I need to import Sidebar here OR change MainLayout to pass Sidebar as a prop.
-    // Let's import Sidebar here to match the previous structure I setup.
-
-    // However, I need to make sure I import Sidebar correctly.
+    // Sidebar Component Wrapper
+    const SidebarWrapper = () => {
+        return <Sidebar />;
+    }
 
     return (
-        <div className="flex flex-1 overflow-hidden">
-            {/* Sidebar Wrapper */}
-            <div
-                ref={sidebarRef}
-                style={{ width: Math.max(170, Math.min(sidebarWidth, 600)) }}
-                className="flex-shrink-0 flex flex-col relative"
-            >
-                {/* I need to render Sidebar here. */}
-                <SidebarWrapper />
+        <div className="flex flex-1 overflow-hidden relative">
+            <AnimatePresence>
+                {(sidebarOpen || !isMobile) && (
+                    <motion.div
+                        ref={sidebarRef}
+                        initial={isMobile ? { x: -300 } : undefined}
+                        animate={isMobile ? { x: 0 } : undefined}
+                        exit={isMobile ? { x: -300 } : undefined}
+                        transition={{ duration: 0.3, ease: "easeInOut" }}
+                        style={{
+                            width: isMobile ? '80%' : Math.max(170, Math.min(sidebarWidth, 600)),
+                            position: isMobile ? 'absolute' : 'relative',
+                            zIndex: isMobile ? 50 : 'auto',
+                            height: '100%',
+                            boxShadow: isMobile ? '2px 0 10px rgba(0,0,0,0.5)' : 'none'
+                        }}
+                        className="flex-shrink-0 flex flex-col bg-[var(--vscode-sidebar-bg)]"
+                    >
+                        <SidebarWrapper />
 
-                {/* Drag Handle */}
-                <div
-                    className="absolute right-0 top-0 bottom-0 w-[4px] cursor-col-resize hover:bg-[#007acc] active:bg-[#007acc] z-10 transition-colors opacity-0 hover:opacity-100 active:opacity-100"
-                    onMouseDown={startResizing}
+                        {/* Drag Handle - Only on Desktop */}
+                        {!isMobile && (
+                            <div
+                                className="absolute right-0 top-0 bottom-0 w-[4px] cursor-col-resize hover:bg-[#007acc] active:bg-[#007acc] z-10 transition-colors opacity-0 hover:opacity-100 active:opacity-100"
+                                onMouseDown={startResizing}
+                            />
+                        )}
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            {/* Backdrop for Mobile */}
+            {isMobile && sidebarOpen && (
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 0.5 }}
+                    exit={{ opacity: 0 }}
+                    className="absolute inset-0 bg-black z-40"
+                    onClick={onSidebarClose}
                 />
-            </div>
+            )}
 
             {/* Content */}
-            <div className="flex-1 min-w-0">
+            <div className="flex-1 min-w-0 h-full">
                 {children}
             </div>
         </div>
     );
 };
-
-// Start: Mock sidebar logic for now, or real sidebar
-import Sidebar from '../vscode/Sidebar';
-
-const SidebarWrapper = () => {
-    return <Sidebar />;
-}
 
 export default ResizableLayout;

@@ -1,12 +1,29 @@
-import { Minus, Square, X } from 'lucide-react';
+import { Minus, Square, X, Menu } from 'lucide-react';
 import Image from 'next/image';
 
-const TitleBar = () => {
+interface TitleBarProps {
+    onMenuClick?: () => void;
+    isMobile?: boolean;
+}
+
+const TitleBar = ({ onMenuClick, isMobile = false }: TitleBarProps) => {
     return (
         <div className="h-8 bg-[var(--vscode-header)] flex items-center justify-between select-none text-[var(--vscode-fg)] text-[13px] border-b border-[var(--vscode-border)]">
             <div className="flex items-center px-2">
-                <Image src="/vscode.png" alt="VSCode Icon" width={18} height={18} className="mr-3" />
-                <div className="flex gap-2">
+                {isMobile && (
+                    <div
+                        className="mr-3 cursor-pointer hover:bg-white/10 p-1 rounded"
+                        onClick={onMenuClick}
+                    >
+                        <Menu size={16} />
+                    </div>
+                )}
+
+                {(!isMobile) && (
+                    <Image src="/vscode.png" alt="VSCode Icon" width={18} height={18} className="mr-3" />
+                )}
+
+                <div className={`flex gap-2 ${isMobile ? 'hidden' : 'flex'}`}>
                     <span className="hover:bg-white/10 px-2 py-0.5 rounded-sm cursor-pointer">File</span>
                     <span className="hover:bg-white/10 px-2 py-0.5 rounded-sm cursor-pointer">Edit</span>
                     <span className="hover:bg-white/10 px-2 py-0.5 rounded-sm cursor-pointer">Selection</span>
@@ -19,7 +36,7 @@ const TitleBar = () => {
             </div>
 
             <div className="flex items-center font-medium opacity-80">
-                <span>Samarth Vaidya - Portfolio</span>
+                <span>{isMobile ? 'Portfolio' : 'Samarth Vaidya - Portfolio'}</span>
             </div>
 
             <div className="flex h-full">

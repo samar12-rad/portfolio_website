@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import ActivityBar from '../vscode/ActivityBar';
 import Sidebar from '../vscode/Sidebar'; // Keep Sidebar import if used elsewhere or remove if not needed directly
@@ -11,6 +11,7 @@ import ResizableLayout from './ResizableLayout';
 import LoadingScreen from '../vscode/LoadingScreen';
 import Terminal from '../vscode/Terminal';
 import { useTabs } from '../providers/TabProvider';
+import MobileOrientationSuggestion from '@/components/common/MobileOrientationSuggestion';
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
     const pathname = usePathname();
@@ -33,16 +34,40 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
     const router = useRouter();
 
     const [isLoading, setIsLoading] = useState(true);
+    const [isMobile, setIsMobile] = useState(false);
+    const [sidebarOpen, setSidebarOpen] = useState(false);
+
+    useEffect(() => {
+        const checkMobile = () => {
+            // Only consider it mobile if width is small AND it's portrait.
+            // If it's landscape (even if small), user wants desktop UI.
+            const isPortrait = window.innerHeight > window.innerWidth;
+            const mobile = window.innerWidth < 768 && isPortrait;
+
+            setIsMobile(mobile);
+            if (!mobile) {
+                setSidebarOpen(true);
+            } else {
+                setSidebarOpen(false);
+            }
+        };
+
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
 
     return (
         <div className="flex flex-col h-screen w-screen bg-[var(--vscode-bg)] text-[var(--vscode-fg)] overflow-hidden">
             {isLoading && <LoadingScreen onComplete={() => setIsLoading(false)} />}
 
-            <TitleBar />
+            <MobileOrientationSuggestion />
+
+            <TitleBar onMenuClick={() => setSidebarOpen(!sidebarOpen)} isMobile={isMobile} />
 
             {/* Top Section */}
             <div className="flex flex-1 overflow-hidden">
-                {!isLoading && (
+                {!isLoading && !isMobile && (
                     <motion.div
                         initial={{ x: -50, opacity: 0 }}
                         animate={{ x: 0, opacity: 1 }}
@@ -60,7 +85,11 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
                         transition={{ duration: 0.4, delay: 0.2 }}
                         className="flex-1 flex overflow-hidden w-full"
                     >
-                        <ResizableLayout>
+                        <ResizableLayout
+                            isMobile={isMobile}
+                            sidebarOpen={sidebarOpen}
+                            onSidebarClose={() => setSidebarOpen(false)}
+                        >
                             {/* Editor Area */}
                             <div className="flex-1 flex flex-col min-w-0 bg-[var(--vscode-bg)] h-full">
                                 {/* Tab Bar */}

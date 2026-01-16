@@ -6,7 +6,7 @@ const ExeViewer = ({ name, command, description }: { name: string, command: stri
     const { runCommand } = useTerminal();
 
     return (
-        <div className="flex flex-col items-center justify-center h-full w-full bg-[#1e1e1e] text-center p-8 overflow-hidden select-none">
+        <div className="flex flex-col items-center justify-start h-full w-full bg-[#1e1e1e] text-center p-8 pt-10 overflow-hidden select-none">
             <div className="w-24 h-24 bg-[#2d2d2d] rounded-xl flex items-center justify-center mb-6 shadow-xl border border-[#333]">
                 <div className="text-green-500 font-mono text-4xl font-bold">EXE</div>
             </div>
