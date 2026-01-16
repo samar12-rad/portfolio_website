@@ -1,0 +1,202 @@
+@import "tailwindcss";
+
+html {
+  scroll-behavior: smooth;
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+/* VS Code Dark (Default) */
+[data-theme='vscode-dark'] {
+  --vscode-bg: #1e1e1e;
+  --vscode-fg: #cccccc;
+  --vscode-sidebar-bg: #252526;
+  --vscode-activity-bar-bg: #333333;
+  --vscode-border: #474747;
+  --vscode-status-bar: #007acc;
+  --vscode-tab-active-bg: #1e1e1e;
+  --vscode-tab-inactive-bg: #2d2d2d;
+  --vscode-highlight: #04395e;
+}
+
+/* VS Code Light */
+[data-theme='vscode-light'] {
+  --vscode-bg: #ffffff;
+  --vscode-fg: #333333;
+  --vscode-sidebar-bg: #f3f3f3;
+  --vscode-activity-bar-bg: #2c2c2c;
+  --vscode-border: #e4e4e4;
+  --vscode-status-bar: #007acc;
+  --vscode-tab-active-bg: #ffffff;
+  --vscode-tab-inactive-bg: #ececec;
+  --vscode-highlight: #0060c0;
+}
+
+/* Dracula */
+[data-theme='dracula'] {
+  --vscode-bg: #282a36;
+  --vscode-fg: #f8f8f2;
+  --vscode-sidebar-bg: #21222c;
+  --vscode-activity-bar-bg: #191a21;
+  --vscode-border: #44475a;
+  --vscode-status-bar: #bd93f9;
+  --vscode-tab-active-bg: #282a36;
+  --vscode-tab-inactive-bg: #21222c;
+  --vscode-highlight: #44475a;
+}
+
+/* Hacker Theme (Default) */
+[data-theme='hacker'] {
+  --vscode-bg: #0a0a0a;
+  --vscode-fg: #00ff41;
+  --vscode-sidebar-bg: #000000;
+  --vscode-activity-bar-bg: #001100;
+  --vscode-border: #003300;
+  --vscode-status-bar: #003300;
+  --vscode-tab-active-bg: #001100;
+  --vscode-tab-inactive-bg: #000000;
+  --vscode-highlight: #003300;
+}
+
+/* GitHub Dark */
+[data-theme='github-dark'] {
+  --vscode-bg: #0d1117;
+  --vscode-fg: #c9d1d9;
+  --vscode-sidebar-bg: #010409;
+  --vscode-activity-bar-bg: #0d1117;
+  --vscode-border: #30363d;
+  --vscode-status-bar: #161b22;
+  --vscode-tab-active-bg: #0d1117;
+  --vscode-tab-inactive-bg: #010409;
+  --vscode-highlight: #1f6feb;
+}
+
+body {
+  color: var(--vscode-fg);
+  background: var(--vscode-bg);
+  font-family: Arial, Helvetica, sans-serif;
+  overflow: hidden;
+  /* Main layout handles overflow */
+}
+
+/* Custom Scrollbar for Webkit */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #424242;
+  /* Default gray, overridden by opacity usually */
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #4f4f4f;
+}
+
+[data-theme='hacker'] ::-webkit-scrollbar-thumb {
+  background: #003300;
+}
+
+[data-theme='hacker'] ::-webkit-scrollbar-thumb:hover {
+  background: #005500;
+}
+
+@keyframes indeterminate {
+  0% {
+    left: -35%;
+    width: 35%;
+  }
+
+  100% {
+    left: 100%;
+    width: 35%;
+  }
+}
+
+.animate-indeterminate-bar {
+  animation: indeterminate 2s infinite linear;
+}
+
+@keyframes matrix-rain {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(100vh);
+    opacity: 0;
+  }
+}
+
+.animate-matrix-rain {
+  animation: matrix-rain 2s infinite linear;
+}
+
+/* Optional Glitch Effect */
+.glitch-effect {
+  position: relative;
+}
+
+.glitch-effect::before,
+.glitch-effect::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.glitch-effect::before {
+  left: 2px;
+  text-shadow: -1px 0 #ff00c1;
+  clip: rect(44px, 450px, 56px, 0);
+  animation: glitch-anim 5s infinite linear alternate-reverse;
+}
+
+.glitch-effect::after {
+  left: -2px;
+  text-shadow: -1px 0 #00fff9;
+  clip: rect(44px, 450px, 56px, 0);
+  animation: glitch-anim 5s infinite linear alternate-reverse;
+}
+
+@keyframes glitch-anim {
+  0% {
+    clip: rect(10px, 9999px, 30px, 0);
+  }
+
+  20% {
+    clip: rect(80px, 9999px, 90px, 0);
+  }
+
+  40% {
+    clip: rect(30px, 9999px, 45px, 0);
+  }
+
+  60% {
+    clip: rect(50px, 9999px, 70px, 0);
+  }
+
+  80% {
+    clip: rect(90px, 9999px, 100px, 0);
+  }
+
+  100% {
+    clip: rect(10px, 9999px, 20px, 0);
+  }
+}
