@@ -40,6 +40,9 @@ const sourceCodePro = Source_Code_Pro({
 export const metadata: Metadata = {
   title: "Dev Portfolio | VS Code Edition",
   description: "A developer portfolio styled like VS Code",
+  icons: {
+    icon: '/vscode.png',
+  },
 };
 
 export default function RootLayout({

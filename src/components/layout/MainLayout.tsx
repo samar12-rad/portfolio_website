@@ -113,6 +113,7 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
                 onOpenCommandPalette={handleOpenCommandPalette}
                 onToggleSidebar={toggleSidebar}
                 onSwitchView={setActiveSidebarView}
+                activeView={activeSidebarView}
             />
 
             <CommandPalette

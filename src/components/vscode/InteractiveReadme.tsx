@@ -1,6 +1,7 @@
 'use client';
 import Link from 'next/link';
 import Image from 'next/image';
+import { Github } from 'lucide-react';
 
 import { useTabs } from '../providers/TabProvider';
 
@@ -49,7 +50,7 @@ const InteractiveReadme = () => {
 
                             <div className="flex flex-wrap justify-center gap-4">
                                 <a href="https://github.com/samar12-rad" target="_blank" className="px-5 py-2 bg-[var(--vscode-sidebar-bg)] hover:bg-[var(--vscode-activity-bar-bg)] rounded flex items-center gap-2 transition-all no-underline border border-[var(--vscode-border)] text-[var(--vscode-fg)]">
-                                    <Image src="/vscode_icon_transparent.png" width={20} height={20} alt="GitHub" className="w-5 h-5" />
+                                    <Github size={20} />
                                     <span>GitHub</span>
                                 </a>
                                 <a href="https://linkedin.com/in/samarth-vaidya" target="_blank" className="px-5 py-2 bg-[#0077b5] hover:bg-[#006097] text-white rounded flex items-center gap-2 transition-all no-underline border border-transparent">
@@ -80,7 +81,7 @@ const InteractiveReadme = () => {
                     <h3 className="text-sm font-mono text-[var(--vscode-fg)]/60 mb-4 self-start w-full border-b border-[var(--vscode-border)] pb-2">GITHUB STATS</h3>
                     <div className="w-full relative aspect-[4/3] flex items-center justify-center">
                         <Image
-                            src="https://awesome-github-stats.azurewebsites.net/user-stats/samar12-rad?cardType=level&preferLogin=false"
+                            src="https://awesome-github-stats.azurewebsites.net/user-stats/samar12-rad?cardType=level&theme=github-dark&fontFamily=&preferLogin=false"
                             alt="Github Stats"
                             fill
                             className="object-contain"
