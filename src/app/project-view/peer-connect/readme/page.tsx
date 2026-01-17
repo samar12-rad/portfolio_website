@@ -16,6 +16,8 @@ export default function Readme() {
             ]}
             techStack={['MERN Stack', 'React', 'Node.js', 'Express', 'MongoDB', 'Socket.IO', 'Docker']}
             repoLink="https://github.com/samar12-rad/peer-connect"
+            demoLink="https://peer-connect-samar-projects.vercel.app/"
+            status="Completed"
         />
     );
 }

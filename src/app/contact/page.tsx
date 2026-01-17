@@ -10,25 +10,19 @@ export default function Contact() {
             <div className="pl-4 flex gap-4 items-center mb-2">
                 <span className="text-[#9cdcfe]">website</span>:
                 <span className="text-[#ce9178] hover:underline cursor-pointer">
-                    <a href="https://samar12-rad.github.io" target="_blank">"samar12-rad.github.io"</a>
+                    <a href="https://portfolio-website-neon-mu-41.vercel.app/" target="_blank">"portfolio-website-neon-mu-41.vercel.app"</a>
                 </span>;
             </div>
             <div className="pl-4 flex gap-4 items-center mb-2">
                 <span className="text-[#9cdcfe]">email</span>:
                 <span className="text-[#ce9178] hover:underline cursor-pointer">
-                    <a href="mailto:contact@example.com">"contact@example.com"</a>
+                    <a href="mailto:v.samarth1212@gmail.com">"v.samarth1212@gmail.com"</a>
                 </span>;
             </div>
             <div className="pl-4 flex gap-4 items-center mb-2">
                 <span className="text-[#9cdcfe]">github</span>:
                 <span className="text-[#ce9178] hover:underline cursor-pointer">
                     <a href="https://github.com/samar12-rad" target="_blank">"github.com/samar12-rad"</a>
-                </span>;
-            </div>
-            <div className="pl-4 flex gap-4 items-center mb-2">
-                <span className="text-[#9cdcfe]">instagram</span>:
-                <span className="text-[#ce9178] hover:underline cursor-pointer">
-                    <a href="https://www.instagram.com/samarth__sv/" target="_blank">"instagram.com/samarth__sv"</a>
                 </span>;
             </div>
             <div className="pl-4 flex gap-4 items-center mb-2">

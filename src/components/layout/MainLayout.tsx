@@ -3,15 +3,20 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import ActivityBar from '../vscode/ActivityBar';
-import Sidebar from '../vscode/Sidebar'; // Keep Sidebar import if used elsewhere or remove if not needed directly
+import SidebarManager from '../vscode/SidebarManager';
 import StatusBar from '../vscode/StatusBar';
 import { usePathname, useRouter } from 'next/navigation';
 import TitleBar from './TitleBar';
 import ResizableLayout from './ResizableLayout';
 import LoadingScreen from '../vscode/LoadingScreen';
-import Terminal from '../vscode/Terminal';
+import BottomPanel from '../vscode/BottomPanel';
 import { useTabs } from '../providers/TabProvider';
+import { useTerminal } from '../providers/TerminalProvider';
 import MobileOrientationSuggestion from '@/components/common/MobileOrientationSuggestion';
+import CommandPalette from '../vscode/CommandPalette';
+import Minimap from '../vscode/Minimap';
+import ContextMenu from '@/components/vscode/ContextMenu';
+import SuggestionManager from '../vscode/SuggestionManager';
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
     const pathname = usePathname();
@@ -22,6 +27,7 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
         if (path.includes('/code')) return 'main.tsx';
         switch (path) {
             case '/': return 'README.md';
+            case '/guide': return 'handbook.md';
             case '/about': return 'about.html';
             case '/projects': return 'projects.tsx';
             case '/contact': return 'contact.css';
@@ -31,16 +37,29 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
 
     const fileName = getFileName(pathname);
     const { tabs, activeTab, setActiveTab, closeTab } = useTabs();
+
+    // Terminal Context used for toggling
+    const { isOpen: isTerminalOpen, toggleTerminal } = useTerminal();
+
     const router = useRouter();
 
     const [isLoading, setIsLoading] = useState(true);
     const [isMobile, setIsMobile] = useState(false);
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
+    // New Feature State
+    const [activeSidebarView, setActiveSidebarView] = useState('explorer');
+    const [showCommandPalette, setShowCommandPalette] = useState(false);
+    const [commandPaletteMode, setCommandPaletteMode] = useState<'commands' | 'themes' | 'fonts'>('commands');
+
+    const handleOpenCommandPalette = (mode: 'commands' | 'themes' | 'fonts' = 'commands') => {
+        setCommandPaletteMode(mode);
+        setShowCommandPalette(true);
+    };
+
     useEffect(() => {
         const checkMobile = () => {
-            // Only consider it mobile if width is small AND it's portrait.
-            // If it's landscape (even if small), user wants desktop UI.
+            // ... existing code ...
             const isPortrait = window.innerHeight > window.innerWidth;
             const mobile = window.innerWidth < 768 && isPortrait;
 
@@ -54,8 +73,35 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
 
         checkMobile();
         window.addEventListener('resize', checkMobile);
-        return () => window.removeEventListener('resize', checkMobile);
-    }, []);
+
+        // Keyboard Shortcuts
+        const handleKeyDown = (e: KeyboardEvent) => {
+            // Toggle Sidebar: Ctrl+B
+            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'b') {
+                e.preventDefault();
+                setSidebarOpen(prev => !prev);
+            }
+            // Toggle Terminal: Ctrl+J (or Ctrl+` in VS Code, but J is common too)
+            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'j') {
+                e.preventDefault();
+                toggleTerminal();
+            }
+            // Command Palette: Ctrl+Shift+P
+            if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'p') {
+                e.preventDefault();
+                handleOpenCommandPalette('commands');
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            window.removeEventListener('resize', checkMobile);
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [toggleTerminal]);
+
+    const toggleSidebar = () => setSidebarOpen(prev => !prev);
 
     return (
         <div className="flex flex-col h-screen w-screen bg-[var(--vscode-bg)] text-[var(--vscode-fg)] overflow-hidden">
@@ -63,35 +109,61 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
 
             <MobileOrientationSuggestion />
 
+            <SuggestionManager
+                onOpenCommandPalette={handleOpenCommandPalette}
+                onToggleSidebar={toggleSidebar}
+                onSwitchView={setActiveSidebarView}
+            />
+
+            <CommandPalette
+                isOpen={showCommandPalette}
+                onClose={() => setShowCommandPalette(false)}
+                toggleSidebar={toggleSidebar}
+                initialMode={commandPaletteMode}
+            />
+
             <TitleBar onMenuClick={() => setSidebarOpen(!sidebarOpen)} isMobile={isMobile} />
+            <ContextMenu onOpenCommandPalette={() => handleOpenCommandPalette('commands')} />
 
             {/* Top Section */}
             <div className="flex flex-1 overflow-hidden">
                 {!isLoading && !isMobile && (
                     <motion.div
-                        initial={{ x: -50, opacity: 0 }}
+                        initial={{ x: -20, opacity: 0 }}
                         animate={{ x: 0, opacity: 1 }}
-                        transition={{ duration: 0.3 }}
+                        transition={{ duration: 0.3, delay: 0.2 }} // Step 1: Activity Bar
                         className="h-full"
                     >
-                        <ActivityBar />
+                        <ActivityBar
+                            onToggleSidebar={toggleSidebar}
+                            isSidebarOpen={sidebarOpen}
+                            activeView={activeSidebarView}
+                            setActiveView={setActiveSidebarView}
+                            onShowCommandPalette={handleOpenCommandPalette}
+                        />
                     </motion.div>
                 )}
 
                 {!isLoading && (
                     <motion.div
-                        initial={{ opacity: 0, scale: 0.98 }}
+                        initial={{ opacity: 0, scale: 0.99 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.4, delay: 0.2 }}
+                        transition={{ duration: 0.4, delay: 0.5 }} // Step 2: Sidebar & Editor
                         className="flex-1 flex overflow-hidden w-full"
                     >
                         <ResizableLayout
                             isMobile={isMobile}
                             sidebarOpen={sidebarOpen}
                             onSidebarClose={() => setSidebarOpen(false)}
+                            sidebarContent={<SidebarManager activeView={activeSidebarView} />}
                         >
                             {/* Editor Area */}
-                            <div className="flex-1 flex flex-col min-w-0 bg-[var(--vscode-bg)] h-full">
+                            <motion.div
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.3, delay: 0.8 }} // Step 3: Editor Content specific
+                                className="flex-1 flex flex-col min-w-0 bg-[var(--vscode-bg)] h-full"
+                            >
                                 {/* Tab Bar */}
                                 <div className="h-9 bg-[var(--vscode-tab-inactive-bg)] flex items-center overflow-x-auto border-b border-[var(--vscode-border)] select-none">
                                     {tabs.map(tab => (
@@ -116,8 +188,29 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
                                 </div>
 
                                 {/* Breadcrumbs */}
-                                <div className="h-6 bg-[var(--vscode-bg)] flex items-center px-4 text-xs text-gray-500 gap-1 select-none">
-                                    <span>src</span> <span>&gt;</span> <span>pages</span> <span>&gt;</span> <span>{fileName}</span>
+                                <div className="h-6 bg-[var(--vscode-bg)] flex items-center px-4 text-xs text-[var(--vscode-fg)] gap-1 select-none overflow-hidden">
+                                    <div className="flex items-center hover:bg-[var(--vscode-hover)] px-1 rounded cursor-pointer opacity-80 hover:opacity-100 transition-opacity">
+                                        <span>portfolio</span>
+                                    </div>
+                                    <span className="opacity-50">&gt;</span>
+                                    <div className="flex items-center hover:bg-[var(--vscode-hover)] px-1 rounded cursor-pointer opacity-80 hover:opacity-100 transition-opacity">
+                                        <span>src</span>
+                                    </div>
+                                    <span className="opacity-50">&gt;</span>
+                                    {pathname === '/' ? (
+                                        <div className="flex items-center hover:bg-[var(--vscode-hover)] px-1 rounded cursor-pointer opacity-80 hover:opacity-100 transition-opacity">
+                                            <span>README.md</span>
+                                        </div>
+                                    ) : (
+                                        pathname.split('/').filter(Boolean).map((segment, index, array) => (
+                                            <div key={segment} className="flex items-center">
+                                                <div className="flex items-center hover:bg-[var(--vscode-hover)] px-1 rounded cursor-pointer opacity-80 hover:opacity-100 transition-opacity">
+                                                    <span>{segment}</span>
+                                                </div>
+                                                {index < array.length - 1 && <span className="opacity-50 mx-1">&gt;</span>}
+                                            </div>
+                                        ))
+                                    )}
                                 </div>
 
                                 {/* Content */}
@@ -131,22 +224,28 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
                                         <div className="flex-1 p-4">
                                             {children}
                                         </div>
+                                        {/* Minimap positioned absolutely on the right */}
+                                        <div className="sticky top-0 right-0 h-full">
+                                            <Minimap />
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            </motion.div>
                         </ResizableLayout>
                     </motion.div>
                 )}
             </div>
 
-            <Terminal />
+            {!isLoading && (
+                <BottomPanel />
+            )}
 
             {/* Bottom Section */}
             {!isLoading && (
                 <motion.div
                     initial={{ y: 20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
-                    transition={{ duration: 0.3, delay: 0.5 }}
+                    transition={{ duration: 0.3, delay: 1.3 }} // Step 5: Status Bar
                 >
                     <StatusBar />
                 </motion.div>

@@ -2,17 +2,17 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-// Start: Mock sidebar logic for now, or real sidebar
-import Sidebar from '../vscode/Sidebar';
+
 
 interface ResizableLayoutProps {
     children: React.ReactNode;
     isMobile?: boolean;
     sidebarOpen?: boolean;
     onSidebarClose?: () => void;
+    sidebarContent?: React.ReactNode;
 }
 
-const ResizableLayout = ({ children, isMobile = false, sidebarOpen = true, onSidebarClose }: ResizableLayoutProps) => {
+const ResizableLayout = ({ children, isMobile = false, sidebarOpen = true, onSidebarClose, sidebarContent }: ResizableLayoutProps) => {
     const [sidebarWidth, setSidebarWidth] = useState(240); // Initial width
     const [isResizing, setIsResizing] = useState(false);
     const sidebarRef = useRef<HTMLDivElement>(null);
@@ -45,11 +45,6 @@ const ResizableLayout = ({ children, isMobile = false, sidebarOpen = true, onSid
         }
     }, [resize, stopResizing, isMobile]);
 
-    // Sidebar Component Wrapper
-    const SidebarWrapper = () => {
-        return <Sidebar />;
-    }
-
     return (
         <div className="flex flex-1 overflow-hidden relative">
             <AnimatePresence>
@@ -69,35 +64,39 @@ const ResizableLayout = ({ children, isMobile = false, sidebarOpen = true, onSid
                         }}
                         className="flex-shrink-0 flex flex-col bg-[var(--vscode-sidebar-bg)]"
                     >
-                        <SidebarWrapper />
+                        {sidebarContent}
 
                         {/* Drag Handle - Only on Desktop */}
-                        {!isMobile && (
-                            <div
-                                className="absolute right-0 top-0 bottom-0 w-[4px] cursor-col-resize hover:bg-[#007acc] active:bg-[#007acc] z-10 transition-colors opacity-0 hover:opacity-100 active:opacity-100"
-                                onMouseDown={startResizing}
-                            />
-                        )}
-                    </motion.div>
+                        {
+                            !isMobile && (
+                                <div
+                                    className="absolute right-0 top-0 bottom-0 w-[4px] cursor-col-resize hover:bg-[#007acc] active:bg-[#007acc] z-10 transition-colors opacity-0 hover:opacity-100 active:opacity-100"
+                                    onMouseDown={startResizing}
+                                />
+                            )
+                        }
+                    </motion.div >
                 )}
-            </AnimatePresence>
+            </AnimatePresence >
 
             {/* Backdrop for Mobile */}
-            {isMobile && sidebarOpen && (
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 0.5 }}
-                    exit={{ opacity: 0 }}
-                    className="absolute inset-0 bg-black z-40"
-                    onClick={onSidebarClose}
-                />
-            )}
+            {
+                isMobile && sidebarOpen && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 0.5 }}
+                        exit={{ opacity: 0 }}
+                        className="absolute inset-0 bg-black z-40"
+                        onClick={onSidebarClose}
+                    />
+                )
+            }
 
             {/* Content */}
             <div className="flex-1 min-w-0 h-full">
                 {children}
             </div>
-        </div>
+        </div >
     );
 };
 

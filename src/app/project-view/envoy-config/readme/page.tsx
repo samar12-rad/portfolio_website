@@ -15,6 +15,7 @@ export default function Readme() {
             ]}
             techStack={['Rust', 'Axum', 'Domain Driven Design']}
             repoLink="https://github.com/samar12-rad"
+            status="Completed"
         />
     );
 }

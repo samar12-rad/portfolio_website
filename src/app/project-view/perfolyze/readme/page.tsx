@@ -16,6 +16,7 @@ export default function Readme() {
             techStack={['React', 'TypeScript', 'Go', 'PostgreSQL', 'Next.js', 'Tailwind CSS']}
             demoLink="#"
             repoLink="https://github.com/samar12-rad"
+            status="Active"
         />
     );
 }

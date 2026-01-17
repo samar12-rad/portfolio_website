@@ -7,9 +7,22 @@ html {
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --vscode-font-family: inherit;
 }
 
-/* VS Code Dark (Default) */
+body {
+  color: var(--vscode-fg);
+  background: var(--vscode-bg);
+  font-family: var(--vscode-font-family), "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  overflow: hidden;
+  /* Main layout handles overflow */
+}
+
+/* =================================================================
+   THEME DEFINITIONS
+   ================================================================= */
+
+/* 1. VS Code Dark (Default) */
 [data-theme='vscode-dark'] {
   --vscode-bg: #1e1e1e;
   --vscode-fg: #cccccc;
@@ -20,48 +33,25 @@ html {
   --vscode-tab-active-bg: #1e1e1e;
   --vscode-tab-inactive-bg: #2d2d2d;
   --vscode-highlight: #04395e;
+  --vscode-hover: #2a2d2e;
 }
 
-/* VS Code Light */
+/* 2. VS Code Light */
 [data-theme='vscode-light'] {
   --vscode-bg: #ffffff;
   --vscode-fg: #333333;
   --vscode-sidebar-bg: #f3f3f3;
-  --vscode-activity-bar-bg: #2c2c2c;
+  --vscode-activity-bar-bg: #e8e8e8;
+  /* Fixed: Lighter activity bar */
   --vscode-border: #e4e4e4;
   --vscode-status-bar: #007acc;
   --vscode-tab-active-bg: #ffffff;
   --vscode-tab-inactive-bg: #ececec;
   --vscode-highlight: #0060c0;
+  --vscode-hover: #e4e4e4;
 }
 
-/* Dracula */
-[data-theme='dracula'] {
-  --vscode-bg: #282a36;
-  --vscode-fg: #f8f8f2;
-  --vscode-sidebar-bg: #21222c;
-  --vscode-activity-bar-bg: #191a21;
-  --vscode-border: #44475a;
-  --vscode-status-bar: #bd93f9;
-  --vscode-tab-active-bg: #282a36;
-  --vscode-tab-inactive-bg: #21222c;
-  --vscode-highlight: #44475a;
-}
-
-/* Hacker Theme (Default) */
-[data-theme='hacker'] {
-  --vscode-bg: #0a0a0a;
-  --vscode-fg: #00ff41;
-  --vscode-sidebar-bg: #000000;
-  --vscode-activity-bar-bg: #001100;
-  --vscode-border: #003300;
-  --vscode-status-bar: #003300;
-  --vscode-tab-active-bg: #001100;
-  --vscode-tab-inactive-bg: #000000;
-  --vscode-highlight: #003300;
-}
-
-/* GitHub Dark */
+/* 3. GitHub Dark */
 [data-theme='github-dark'] {
   --vscode-bg: #0d1117;
   --vscode-fg: #c9d1d9;
@@ -72,17 +62,250 @@ html {
   --vscode-tab-active-bg: #0d1117;
   --vscode-tab-inactive-bg: #010409;
   --vscode-highlight: #1f6feb;
+  --vscode-hover: #21262d;
 }
 
-body {
-  color: var(--vscode-fg);
-  background: var(--vscode-bg);
-  font-family: Arial, Helvetica, sans-serif;
-  overflow: hidden;
-  /* Main layout handles overflow */
+/* 4. GitHub Light */
+[data-theme='github-light'] {
+  --vscode-bg: #ffffff;
+  --vscode-fg: #24292f;
+  --vscode-sidebar-bg: #f6f8fa;
+  --vscode-activity-bar-bg: #ffffff;
+  --vscode-border: #d0d7de;
+  --vscode-status-bar: #f6f8fa;
+  --vscode-tab-active-bg: #ffffff;
+  --vscode-tab-inactive-bg: #f6f8fa;
+  --vscode-highlight: #0969da;
+  --vscode-hover: #f3f4f6;
 }
 
-/* Custom Scrollbar for Webkit */
+/* 5. Dracula */
+[data-theme='dracula'] {
+  --vscode-bg: #282a36;
+  --vscode-fg: #f8f8f2;
+  --vscode-sidebar-bg: #21222c;
+  --vscode-activity-bar-bg: #191a21;
+  --vscode-border: #44475a;
+  --vscode-status-bar: #bd93f9;
+  --vscode-tab-active-bg: #282a36;
+  --vscode-tab-inactive-bg: #21222c;
+  --vscode-highlight: #44475a;
+  --vscode-hover: #44475a;
+}
+
+/* 6. Checker (Previously Hacker) */
+[data-theme='hacker'] {
+  --vscode-bg: #0a0a0a;
+  --vscode-fg: #00ff41;
+  --vscode-sidebar-bg: #000000;
+  --vscode-activity-bar-bg: #001100;
+  --vscode-border: #003300;
+  --vscode-status-bar: #003300;
+  --vscode-tab-active-bg: #001100;
+  --vscode-tab-inactive-bg: #000000;
+  --vscode-highlight: #003300;
+  --vscode-hover: #002200;
+}
+
+/* 7. Monokai */
+[data-theme='monokai'] {
+  --vscode-bg: #272822;
+  --vscode-fg: #f8f8f2;
+  --vscode-sidebar-bg: #1e1f1c;
+  --vscode-activity-bar-bg: #171814;
+  --vscode-border: #49483e;
+  --vscode-status-bar: #75715e;
+  --vscode-tab-active-bg: #272822;
+  --vscode-tab-inactive-bg: #1e1f1c;
+  --vscode-highlight: #fd971f;
+  --vscode-hover: #3e3d32;
+}
+
+/* 8. Solarized Dark */
+[data-theme='solarized-dark'] {
+  --vscode-bg: #002b36;
+  --vscode-fg: #839496;
+  --vscode-sidebar-bg: #00212b;
+  --vscode-activity-bar-bg: #001f27;
+  --vscode-border: #073642;
+  --vscode-status-bar: #073642;
+  --vscode-tab-active-bg: #002b36;
+  --vscode-tab-inactive-bg: #00212b;
+  --vscode-highlight: #268bd2;
+  --vscode-hover: #073642;
+}
+
+/* 9. Solarized Light */
+[data-theme='solarized-light'] {
+  --vscode-bg: #fdf6e3;
+  --vscode-fg: #657b83;
+  --vscode-sidebar-bg: #eee8d5;
+  --vscode-activity-bar-bg: #fdf6e3;
+  --vscode-border: #ded8c5;
+  --vscode-status-bar: #eee8d5;
+  --vscode-tab-active-bg: #fdf6e3;
+  --vscode-tab-inactive-bg: #eee8d5;
+  --vscode-highlight: #268bd2;
+  --vscode-hover: #ebe5ce;
+}
+
+/* 10. Nord */
+[data-theme='nord'] {
+  --vscode-bg: #2e3440;
+  --vscode-fg: #d8dee9;
+  --vscode-sidebar-bg: #252932;
+  --vscode-activity-bar-bg: #2e3440;
+  --vscode-border: #3b4252;
+  --vscode-status-bar: #3b4252;
+  --vscode-tab-active-bg: #2e3440;
+  --vscode-tab-inactive-bg: #252932;
+  --vscode-highlight: #88c0d0;
+  --vscode-hover: #434c5e;
+}
+
+/* 11. One Dark Pro */
+[data-theme='onedark-pro'] {
+  --vscode-bg: #282c34;
+  --vscode-fg: #abb2bf;
+  --vscode-sidebar-bg: #21252b;
+  --vscode-activity-bar-bg: #282c34;
+  --vscode-border: #181a1f;
+  --vscode-status-bar: #21252b;
+  --vscode-tab-active-bg: #282c34;
+  --vscode-tab-inactive-bg: #21252b;
+  --vscode-highlight: #61afef;
+  --vscode-hover: #2c313a;
+}
+
+/* 12. Night Owl */
+[data-theme='night-owl'] {
+  --vscode-bg: #011627;
+  --vscode-fg: #d6deeb;
+  --vscode-sidebar-bg: #01111d;
+  --vscode-activity-bar-bg: #011627;
+  --vscode-border: #5f7e97;
+  --vscode-status-bar: #011627;
+  --vscode-tab-active-bg: #0b2942;
+  --vscode-tab-inactive-bg: #01111d;
+  --vscode-highlight: #82aaff;
+  --vscode-hover: #1d3b53;
+}
+
+/* 13. Shades of Purple */
+[data-theme='shades-of-purple'] {
+  --vscode-bg: #2d2b55;
+  --vscode-fg: #ffffff;
+  --vscode-sidebar-bg: #1e1e3f;
+  --vscode-activity-bar-bg: #2d2b55;
+  --vscode-border: #1e1e3f;
+  --vscode-status-bar: #5c2d91;
+  /* Adjusted for visibility */
+  --vscode-tab-active-bg: #2d2b55;
+  --vscode-tab-inactive-bg: #1e1e3f;
+  --vscode-highlight: #b362ff;
+  --vscode-hover: #4d21fc;
+}
+
+/* 14. Cobalt2 */
+[data-theme='cobalt2'] {
+  --vscode-bg: #193549;
+  --vscode-fg: #ffffff;
+  --vscode-sidebar-bg: #15232d;
+  --vscode-activity-bar-bg: #002240;
+  --vscode-border: #0d3a58;
+  --vscode-status-bar: #ffc600;
+  --vscode-tab-active-bg: #193549;
+  --vscode-tab-inactive-bg: #122738;
+  --vscode-highlight: #0088ff;
+  --vscode-hover: #1f4662;
+}
+
+/* 15. SynthWave '84 */
+[data-theme='synthwave-84'] {
+  --vscode-bg: #2a2139;
+  --vscode-fg: #ffffff;
+  --vscode-sidebar-bg: #241b2f;
+  --vscode-activity-bar-bg: #1f1622;
+  --vscode-border: #463465;
+  --vscode-status-bar: #34294f;
+  --vscode-tab-active-bg: #2a2139;
+  --vscode-tab-inactive-bg: #241b2f;
+  --vscode-highlight: #f92aad;
+  --vscode-hover: #3b2c4d;
+}
+
+/* 16. Tokyo Night */
+[data-theme='tokyo-night'] {
+  --vscode-bg: #1a1b26;
+  --vscode-fg: #a9b1d6;
+  --vscode-sidebar-bg: #16161e;
+  --vscode-activity-bar-bg: #1a1b26;
+  --vscode-border: #101014;
+  --vscode-status-bar: #16161e;
+  --vscode-tab-active-bg: #1a1b26;
+  --vscode-tab-inactive-bg: #16161e;
+  --vscode-highlight: #7aa2f7;
+  --vscode-hover: #292e42;
+}
+
+/* 17. Ayu Dark */
+[data-theme='ayu-dark'] {
+  --vscode-bg: #0f1419;
+  --vscode-fg: #b3b1ad;
+  --vscode-sidebar-bg: #0b0e12;
+  --vscode-activity-bar-bg: #0b0e12;
+  --vscode-border: #242936;
+  --vscode-status-bar: #0b0e12;
+  --vscode-tab-active-bg: #0f1419;
+  --vscode-tab-inactive-bg: #0d1014;
+  --vscode-highlight: #e6b450;
+  --vscode-hover: #19202b;
+}
+
+/* 18. Ayu Light */
+[data-theme='ayu-light'] {
+  --vscode-bg: #fafafa;
+  --vscode-fg: #5c6773;
+  --vscode-sidebar-bg: #f8f9fa;
+  --vscode-activity-bar-bg: #fafafa;
+  --vscode-border: #e6e6e6;
+  --vscode-status-bar: #f0f0f0;
+  --vscode-tab-active-bg: #fafafa;
+  --vscode-tab-inactive-bg: #f3f3f3;
+  --vscode-highlight: #ff9940;
+  --vscode-hover: #f1f2f3;
+}
+
+/* 19. Cyberpunk */
+[data-theme='cyberpunk'] {
+  --vscode-bg: #02021d;
+  --vscode-fg: #00ff9c;
+  --vscode-sidebar-bg: #050124;
+  --vscode-activity-bar-bg: #02021d;
+  --vscode-border: #ff2a6d;
+  --vscode-status-bar: #ff2a6d;
+  --vscode-tab-active-bg: #02021d;
+  --vscode-tab-inactive-bg: #11053c;
+  --vscode-highlight: #05d9e8;
+  --vscode-hover: #210245;
+}
+
+/* 20. High Contrast */
+[data-theme='high-contrast'] {
+  --vscode-bg: #000000;
+  --vscode-fg: #ffffff;
+  --vscode-sidebar-bg: #000000;
+  --vscode-activity-bar-bg: #000000;
+  --vscode-border: #ffffff;
+  --vscode-status-bar: #000000;
+  --vscode-tab-active-bg: #000000;
+  --vscode-tab-inactive-bg: #000000;
+  --vscode-highlight: #ffff00;
+  --vscode-hover: #333333;
+}
+
+
+/* Scrollbar Styles */
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
@@ -94,8 +317,14 @@ body {
 
 ::-webkit-scrollbar-thumb {
   background: #424242;
-  /* Default gray, overridden by opacity usually */
   border-radius: 5px;
+}
+
+[data-theme='vscode-light'] ::-webkit-scrollbar-thumb,
+[data-theme='github-light'] ::-webkit-scrollbar-thumb,
+[data-theme='solarized-light'] ::-webkit-scrollbar-thumb,
+[data-theme='ayu-light'] ::-webkit-scrollbar-thumb {
+  background: #c3c3c3;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -110,93 +339,43 @@ body {
   background: #005500;
 }
 
-@keyframes indeterminate {
+@keyframes flash-pulse {
   0% {
-    left: -35%;
-    width: 35%;
+    box-shadow: 0 0 0 0 rgba(0, 122, 204, 0.6);
+    background-color: rgba(0, 122, 204, 0.1);
+  }
+
+  50% {
+    box-shadow: 0 0 20px 2px rgba(0, 122, 204, 0.5);
+    background-color: rgba(0, 122, 204, 0.3);
   }
 
   100% {
-    left: 100%;
-    width: 35%;
+    box-shadow: 0 0 0 0 rgba(0, 122, 204, 0);
+    background-color: rgba(0, 122, 204, 0.1);
   }
 }
 
-.animate-indeterminate-bar {
-  animation: indeterminate 2s infinite linear;
+.flash-highlight {
+  animation: flash-pulse 2.5s infinite ease-in-out;
+  z-index: 50;
+  position: relative;
+  border-color: #007acc !important;
+  border-radius: 6px;
+  transition: all 0.3s ease;
 }
 
-@keyframes matrix-rain {
-  0% {
-    transform: translateY(-100%);
-    opacity: 0;
-  }
-
-  10% {
-    opacity: 1;
-  }
-
-  100% {
-    transform: translateY(100vh);
-    opacity: 0;
-  }
-}
-
-.animate-matrix-rain {
-  animation: matrix-rain 2s infinite linear;
-}
-
-/* Optional Glitch Effect */
-.glitch-effect {
+.z-elevated {
+  z-index: 60 !important;
   position: relative;
 }
 
-.glitch-effect::before,
-.glitch-effect::after {
-  content: attr(data-text);
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.glitch-effect::before {
-  left: 2px;
-  text-shadow: -1px 0 #ff00c1;
-  clip: rect(44px, 450px, 56px, 0);
-  animation: glitch-anim 5s infinite linear alternate-reverse;
-}
-
-.glitch-effect::after {
-  left: -2px;
-  text-shadow: -1px 0 #00fff9;
-  clip: rect(44px, 450px, 56px, 0);
-  animation: glitch-anim 5s infinite linear alternate-reverse;
-}
-
-@keyframes glitch-anim {
-  0% {
-    clip: rect(10px, 9999px, 30px, 0);
-  }
-
-  20% {
-    clip: rect(80px, 9999px, 90px, 0);
-  }
-
-  40% {
-    clip: rect(30px, 9999px, 45px, 0);
-  }
-
-  60% {
-    clip: rect(50px, 9999px, 70px, 0);
-  }
-
-  80% {
-    clip: rect(90px, 9999px, 100px, 0);
-  }
-
-  100% {
-    clip: rect(10px, 9999px, 20px, 0);
-  }
+.focus-mode-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 55;
+  backdrop-filter: blur(4px);
+  background-color: rgba(0, 0, 0, 0.6);
+  pointer-events: none;
+  transition: opacity 0.3s ease;
 }

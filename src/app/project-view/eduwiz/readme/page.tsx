@@ -16,6 +16,7 @@ export default function Readme() {
             ]}
             techStack={['Node.js', 'Express.js', 'MongoDB', 'React.js', 'REST API']}
             repoLink="https://github.com/samar12-rad"
+            status="Completed"
         />
     );
 }

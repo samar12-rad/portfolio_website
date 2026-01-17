@@ -9,10 +9,11 @@ interface ProjectReadmeProps {
     techStack: string[];
     demoLink?: string;
     repoLink?: string;
+    status?: 'Active' | 'Completed';
     archDiagram?: string; // Markdown text or image url
 }
 
-const ProjectReadme = ({ title, description, overview, features, techStack, demoLink, repoLink }: ProjectReadmeProps) => {
+const ProjectReadme = ({ title, description, overview, features, techStack, demoLink, repoLink, status = 'Active' }: ProjectReadmeProps) => {
     return (
         <div className="max-w-4xl mx-auto p-8 font-sans text-[var(--vscode-fg)]">
             {/* Header */}
@@ -88,8 +89,17 @@ const ProjectReadme = ({ title, description, overview, features, techStack, demo
                     <section className="bg-[var(--vscode-sidebar-bg)] p-6 rounded-xl border border-[var(--vscode-border)] opacity-80">
                         <h3 className="text-sm font-mono uppercase opacity-60 mb-4 tracking-wider">Status</h3>
                         <div className="flex items-center gap-2">
-                            <span className="w-3 h-3 rounded-full bg-green-500 animate-pulse"></span>
-                            <span className="font-mono text-sm">Active Development</span>
+                            {status === 'Active' ? (
+                                <>
+                                    <span className="w-3 h-3 rounded-full bg-green-500 animate-pulse"></span>
+                                    <span className="font-mono text-sm">Active Development</span>
+                                </>
+                            ) : (
+                                <>
+                                    <span className="w-3 h-3 rounded-full bg-blue-500"></span>
+                                    <span className="font-mono text-sm">Completed</span>
+                                </>
+                            )}
                         </div>
                     </section>
                 </motion.div>

@@ -16,6 +16,8 @@ export default function Readme() {
             ]}
             techStack={['Go (Gin)', 'React 19', 'PostgreSQL', 'Docker', 'Linux', 'Vite', 'Tailwind CSS']}
             repoLink="https://github.com/samar12-rad"
+            demoLink="https://tt-ms.vercel.app/"
+            status="Completed"
         />
     );
 }
