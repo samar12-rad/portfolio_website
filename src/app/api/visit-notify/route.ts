@@ -3,24 +3,30 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function POST(req: NextRequest) {
     try {
         const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
-        if (!webhookUrl) {
-            // Silently fail if no webhook is configured to avoid errors in logs/frontend
-            return NextResponse.json({ message: 'No webhook configured' }, { status: 200 });
-        }
+        if (!webhookUrl) return NextResponse.json({ message: 'No webhook configured' }, { status: 200 });
 
         const { userAgent, language, screenSize, referrer } = await req.json();
 
-        // Get cloud provider headers (Vercel)
-        const ip = req.headers.get('x-forwarded-for') || 'Unknown IP';
-        const city = req.headers.get('x-vercel-ip-city') || 'Unknown City';
-        const country = req.headers.get('x-vercel-ip-country') || 'Unknown Country';
-        const countryRegion = req.headers.get('x-vercel-ip-country-region');
+        // 1. Get Visitor IP (Handle Vercel headers or localhost)
+        let ip = req.headers.get('x-forwarded-for')?.split(',')[0].trim() || 'Unknown';
 
-        // Construct simplified location string
-        const location = countryRegion
-            ? `${city}, ${countryRegion}, ${country}`
-            : `${city}, ${country}`;
+        // 2. Fetch Geo Data from ip-api.com (HTTP is fine for server-side requests)
+        // If localhost (::1), query API without IP to get the server's public IP (useful for local testing)
+        // If production, query with the visitor's IP
+        const isLocal = ip === '::1' || ip === '127.0.0.1' || ip === 'Unknown';
+        const geoApiUrl = isLocal
+            ? 'http://ip-api.com/json/?fields=status,message,country,countryCode,regionName,city,zip,lat,lon,isp,org,as,query'
+            : `http://ip-api.com/json/${ip}?fields=status,message,country,countryCode,regionName,city,zip,lat,lon,isp,org,as,query`;
 
+        const geoRes = await fetch(geoApiUrl);
+        const geoData = await geoRes.json();
+
+        // 3. Construct Maps Link
+        const mapLink = geoData.lat && geoData.lon
+            ? `[View on Map](https://www.google.com/maps?q=${geoData.lat},${geoData.lon})`
+            : 'N/A';
+
+        // 4. Build Discord Payload
         const payload = {
             username: "Portfolio Watchdog",
             avatar_url: "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png",
@@ -29,13 +35,14 @@ export async function POST(req: NextRequest) {
                     title: "🚨 New Visitor Detected",
                     color: 5814783, // Bluish color
                     fields: [
-                        { name: "📍 Location", value: location, inline: true },
-                        { name: "🌐 IP Address", value: ip, inline: true },
+                        { name: "📍 Location", value: `${geoData.city}, ${geoData.regionName}, ${geoData.country}`, inline: true },
+                        { name: "🏢 ISP", value: geoData.isp || 'Unknown', inline: true },
+                        { name: "🌐 IP Address", value: geoData.query || ip, inline: true },
+                        { name: "🗺️ Map", value: mapLink, inline: true },
                         { name: "🖥️ Device", value: userAgent || 'Unknown', inline: false },
-                        { name: "📏 Screen", value: screenSize || 'Unknown', inline: true },
-                        { name: "🗣️ Language", value: language || 'Unknown', inline: true },
                         { name: "🔗 Referrer", value: referrer || 'Direct', inline: true },
                     ],
+                    footer: { text: `Screen: ${screenSize} • Lang: ${language}` },
                     timestamp: new Date().toISOString()
                 }
             ]
@@ -50,7 +57,6 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ success: true });
     } catch (error) {
         console.error('Notification error:', error);
-        // Return success anyway to keep client ignorant of failure
         return NextResponse.json({ success: true });
     }
 }

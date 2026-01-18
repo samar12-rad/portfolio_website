@@ -20,7 +20,7 @@ const SourceControlView = () => {
             if (!response.ok) throw new Error('Failed to fetch');
 
             const events = await response.json();
-            const pushEvents = events.filter((e: any) => e.type === 'PushEvent');
+            const pushEvents = events.filter((e: any) => e.type === 'PushEvent' && !e.payload.ref?.includes('vercel'));
 
             const processedEvents = pushEvents.slice(0, 5); // Limit to top 5 to avoid rate limits
             const recentCommits: Commit[] = [];
