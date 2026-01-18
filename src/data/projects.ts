@@ -12,8 +12,8 @@ export const projects = [
         slug: 'peer-connect'
     },
     {
-        title: 'Timetable & Attendance System',
-        description: '[Completed] Comprehensive solution for educational institutions. Manages schedules, conflicts, and attendance with role-based access.',
+        title: 'Attendance System',
+        description: '[Completed] Comprehensive solution for educational institutions. Currently used by my university. Manages schedules, conflicts, and attendance with role-based access.',
         tags: ['React', 'Go (Gin)', 'PostgreSQL', 'Microservices'],
         slug: 'tt-management'
     },

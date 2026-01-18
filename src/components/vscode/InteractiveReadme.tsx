@@ -132,10 +132,10 @@ const InteractiveReadme = () => {
                 <h2 className="border-b border-[var(--vscode-border)] pb-2 text-2xl font-semibold">🔬 Projects</h2>
                 <div className="grid grid-cols-1 gap-6 mt-6">
                     <ProjectCard
-                        title="Timetable & Attendance Management System"
+                        title="Attendance Management System"
                         tech="React, Go (Gin), PostgreSQL, MongoDB, Linux, Docker"
                         slug="tt-management"
-                        desc="Built and deployed a production system used by faculty to manage schedules and attendance. Owned backend architecture, frontend workflows, and deployment from start to finish. Implemented role-based access for faculty and admins; student view added after launch demand. Split backend into microservices and led deployment using Linux servers, static IPs, and subdomains."
+                        desc="Built and deployed a production system, currently used by my university, to manage schedules and attendance. Owned backend architecture, frontend workflows, and deployment from start to finish. Implemented role-based access for faculty and admins; student view added after launch demand. Split backend into microservices and led deployment using Linux servers, static IPs, and subdomains."
                     />
                     <ProjectCard
                         title="Peer Connect"
@@ -210,7 +210,7 @@ const ProjectCard = ({ title, tech, desc, slug }: { title: string, tech: string,
 
     // Map titles to slugs if not provided (fallback)
     const getSlug = (title: string) => {
-        if (title.includes('Timetable')) return 'tt-management';
+        if (title.includes('Attendance')) return 'tt-management';
         if (title.includes('Peer')) return 'peer-connect';
         if (title.includes('Edu')) return 'eduwiz';
         if (title.includes('Envoy')) return 'envoy-config'; // Assumption based on previous implementation
