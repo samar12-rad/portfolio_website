@@ -37,7 +37,7 @@ const InteractiveReadme = () => {
                         <div className="text-center flex flex-col items-center max-w-2xl">
                             <div className="relative w-32 h-32 mb-6 rounded-full overflow-hidden border-4 border-[#007acc] shadow-2xl">
                                 <Image
-                                    src="/new_pfp.jpeg"
+                                    src="/new_pfp.png"
                                     alt="Samarth Vaidya"
                                     fill
                                     className="object-cover"
