@@ -1,34 +1,36 @@
 'use client';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Github } from 'lucide-react';
+import { Github, FileText } from 'lucide-react';
 
 import { useTabs } from '../providers/TabProvider';
+import RecruiterPopup from './RecruiterPopup';
 
 const InteractiveReadme = () => {
     const { addTab } = useTabs();
 
-
-
-
     return (
         <div className="max-w-4xl mx-auto p-4 md:p-8 prose prose-invert prose-headings:text-[var(--vscode-fg)] prose-p:text-[var(--vscode-fg)] prose-strong:text-[#569cd6] prose-a:text-[#3794ff] prose-ul:text-[var(--vscode-fg)]">
+
+            <RecruiterPopup />
 
             {/* Header / Intro */}
             <div className="text-center pb-2 mb-4 relative">
                 {/* Desktop Button */}
-                <Link href="/guide" onClick={() => addTab('/guide', 'handbook.md')}>
-                    <div className="hidden md:inline-flex absolute top-[-50px] left-1/2 transform -translate-x-1/2 gap-2 px-4 py-2 bg-[#007acc]/10 border border-[#007acc] text-[#007acc] rounded-full text-sm font-bold cursor-pointer hover:bg-[#007acc]/20 transition-all">
-                        <span>ℹ️ What is this website?</span>
+                <a href="https://drive.google.com/file/d/1EvXWqrdvs9UKnh-2rJK_r8tTSE0i4Aaf/view?usp=sharing" target="_blank" rel="noopener noreferrer">
+                    <div className="hidden md:inline-flex absolute top-[-50px] left-1/2 transform -translate-x-1/2 gap-2 px-4 py-2 bg-[#007acc]/10 border border-[#007acc] text-[#007acc] rounded-full text-sm font-bold cursor-pointer hover:bg-[#007acc]/20 transition-all flex items-center">
+                        <FileText size={22} />
+                        <span className='text-xl'>My Resume</span>
                     </div>
-                </Link>
+                </a>
 
                 {/* Mobile Toast */}
-                <Link href="/guide" onClick={() => addTab('/guide', 'handbook.md')}>
+                <a href="https://drive.google.com/file/d/1EvXWqrdvs9UKnh-2rJK_r8tTSE0i4Aaf/view?usp=sharing" target="_blank" rel="noopener noreferrer">
                     <div className="md:hidden fixed bottom-6 right-6 z-50 flex items-center gap-2 px-4 py-3 bg-[#007acc] text-white rounded-full text-sm font-bold shadow-2xl cursor-pointer hover:bg-[#0063a5] transition-all animate-bounce">
-                        <span>ℹ️ What is this?</span>
+                        <FileText size={16} />
+                        <span>Resume</span>
                     </div>
-                </Link>
+                </a>
 
                 <div className="relative w-full mb-4 md:mt-10 rounded-lg overflow-hidden border border-[var(--vscode-border)]">
                     <div className="w-full min-h-[400px] bg-gradient-to-r from-blue-900/40 to-purple-900/40 flex items-center justify-center p-8">
