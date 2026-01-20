@@ -75,17 +75,32 @@ const SuggestionManager = ({ onOpenCommandPalette, onToggleSidebar, onSwitchView
         const seenIds = JSON.parse(localStorage.getItem('vscode-portfolio-seen-suggestions') || '[]');
         const lastShownId = seenIds.length > 0 ? seenIds[seenIds.length - 1] : null;
 
+        // Determine device type
+        const isMobile = window.innerWidth < 768;
+        const currentDevice = isMobile ? 'mobile' : 'desktop';
+
+        // Filter: Must match 'all' or the specific current device
+        const validSuggestions = suggestions.filter(s => {
+            const deviceTarget = s.device || 'all'; // Default to 'all' if not specified (backward compat)
+            return deviceTarget === 'all' || deviceTarget === currentDevice;
+        });
+
         // Find a suggestion that hasn't been seen yet, or recycle if all seen
-        const available = suggestions.filter(s => !seenIds.includes(s.id));
+        const available = validSuggestions.filter(s => !seenIds.includes(s.id));
 
         let nextSuggestion: Suggestion;
 
         if (available.length > 0) {
             nextSuggestion = available[Math.floor(Math.random() * available.length)];
         } else {
-            // Fallback: Pick any suggestion EXCEPT the last one shown to avoid immediate repeats
-            const retryPool = suggestions.filter(s => s.id !== lastShownId);
-            nextSuggestion = retryPool[Math.floor(Math.random() * retryPool.length)];
+            // Fallback: Pick any VALID suggestion EXCEPT the last one shown
+            const retryPool = validSuggestions.filter(s => s.id !== lastShownId);
+            if (retryPool.length > 0) {
+                nextSuggestion = retryPool[Math.floor(Math.random() * retryPool.length)];
+            } else {
+                // If retry pool is empty (e.g. only 1 valid suggestion exists), just pick it
+                nextSuggestion = validSuggestions[0];
+            }
         }
 
         setCurrentSuggestion(nextSuggestion);
