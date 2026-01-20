@@ -24,13 +24,15 @@ const InteractiveReadme = () => {
                     </div>
                 </a>
 
-                {/* Mobile Toast */}
+                {/* Mobile Toast - Top Right */}
                 <a href="https://drive.google.com/file/d/1EvXWqrdvs9UKnh-2rJK_r8tTSE0i4Aaf/view?usp=sharing" target="_blank" rel="noopener noreferrer">
-                    <div className="md:hidden fixed bottom-6 right-6 z-50 flex items-center gap-2 px-4 py-3 bg-[#007acc] text-white rounded-full text-sm font-bold shadow-2xl cursor-pointer hover:bg-[#0063a5] transition-all animate-bounce">
+                    <div className="md:hidden fixed top-12 right-4 z-50 flex items-center gap-2 px-4 py-3 bg-[#007acc] text-white rounded-full text-sm font-bold shadow-2xl cursor-pointer hover:bg-[#0063a5] transition-all animate-bounce">
                         <FileText size={16} />
                         <span>Resume</span>
                     </div>
                 </a>
+
+
 
                 <div className="relative w-full mb-4 md:mt-10 rounded-lg overflow-hidden border border-[var(--vscode-border)]">
                     <div className="w-full min-h-[400px] bg-gradient-to-r from-blue-900/40 to-purple-900/40 flex items-center justify-center p-8">

@@ -104,7 +104,7 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
     const toggleSidebar = () => setSidebarOpen(prev => !prev);
 
     return (
-        <div className="flex flex-col h-screen w-screen bg-[var(--vscode-bg)] text-[var(--vscode-fg)] overflow-hidden">
+        <div className="flex flex-col h-dvh w-screen bg-[var(--vscode-bg)] text-[var(--vscode-fg)] overflow-hidden">
             {isLoading && <LoadingScreen onComplete={() => setIsLoading(false)} />}
 
             <MobileOrientationSuggestion />
@@ -166,7 +166,7 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
                                 className="flex-1 flex flex-col min-w-0 bg-[var(--vscode-bg)] h-full"
                             >
                                 {/* Tab Bar */}
-                                <div className="h-9 bg-[var(--vscode-tab-inactive-bg)] flex items-center overflow-x-auto border-b border-[var(--vscode-border)] select-none">
+                                <div className="h-9 bg-[var(--vscode-tab-inactive-bg)] flex items-center overflow-x-auto overflow-y-hidden border-b border-[var(--vscode-border)] select-none">
                                     {tabs.map(tab => (
                                         <div
                                             key={tab.path}
