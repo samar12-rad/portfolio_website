@@ -12,7 +12,7 @@ import LoadingScreen from '../vscode/LoadingScreen';
 import BottomPanel from '../vscode/BottomPanel';
 import { useTabs } from '../providers/TabProvider';
 import { useTerminal } from '../providers/TerminalProvider';
-import MobileOrientationSuggestion from '@/components/common/MobileOrientationSuggestion';
+
 import CommandPalette from '../vscode/CommandPalette';
 import Minimap from '../vscode/Minimap';
 import ContextMenu from '@/components/vscode/ContextMenu';
