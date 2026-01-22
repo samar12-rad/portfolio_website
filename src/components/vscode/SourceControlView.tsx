@@ -20,61 +20,16 @@ const SourceControlView = () => {
             if (!response.ok) throw new Error('Failed to fetch');
 
             const events = await response.json();
-            const pushEvents = events.filter((e: any) => e.type === 'PushEvent');
+            const pushEvents = events.filter((e: any) =>
+                e.type === 'PushEvent' &&
+                !e.payload.ref?.includes('vercel') &&
+                !e.repo.name.includes('portfolio_website') &&
+                !e.repo.name.endsWith('/samar12-rad')
+            );
 
-            const processedEvents = pushEvents.slice(0, 5); // Limit to top 5 to avoid rate limits
+            const processedEvents = pushEvents.slice(0, 20); // Fetch more events to ensure we get 15 commits
             const recentCommits: Commit[] = [];
 
-            await Promise.all(processedEvents.map(async (event: any) => {
-                if (event.payload && event.payload.commits && event.payload.commits.length > 0) {
-                    // Use existing commits
-                    event.payload.commits.forEach((commit: any) => {
-                        recentCommits.push({
-                            message: commit.message,
-                            repo: event.repo.name.replace('samar12-rad/', ''),
-                            date: new Date(event.created_at).toLocaleDateString(),
-                            url: `https://github.com/${event.repo.name}/commit/${commit.sha}`
-                        });
-                    });
-                } else if (event.payload && event.payload.head) {
-                    // Fetch individual commit details
-                    try {
-                        const commitRes = await fetch(`https://api.github.com/repos/${event.repo.name}/commits/${event.payload.head}`);
-                        if (commitRes.ok) {
-                            const commitData = await commitRes.json();
-                            recentCommits.push({
-                                message: commitData.commit.message,
-                                repo: event.repo.name.replace('samar12-rad/', ''),
-                                date: new Date(event.created_at).toLocaleDateString(),
-                                url: `https://github.com/${event.repo.name}/commit/${event.payload.head}`
-                            });
-                        } else {
-                            throw new Error('Failed to fetch commit details');
-                        }
-                    } catch (e) {
-                        // Fallback if detail fetch fails
-                        recentCommits.push({
-                            message: `Push to ${event.payload.ref?.replace('refs/heads/', '') || 'branch'}`,
-                            repo: event.repo.name.replace('samar12-rad/', ''),
-                            date: new Date(event.created_at).toLocaleDateString(),
-                            url: `https://github.com/${event.repo.name}/commits/${event.payload.head || ''}`
-                        });
-                    }
-                }
-            }));
-
-            // Sort by date (descending) as Promise.all might mix order, and we want most recent first
-            // Actually events are already sorted by time, but concurrent fetching might mess array push order.
-            // We can treat them as a flat list and sort?
-            // Actually, `created_at` is reliable.
-            // But `recentCommits` are strings.
-            // Since we are mixing multiple commits from one event and single commits from others...
-            // It's safer to sort. But wait, `date` in my Commit interface is a LocaleString (bad for sorting).
-            // I'll skip sorting for now or just insert them in order?
-            // Better: Map `processedEvents` to promises effectively, then flatMap?
-            // Yes.
-
-            // Redoing the approach for order preservation:
             const results = await Promise.all(processedEvents.map(async (event: any) => {
                 if (event.payload && event.payload.commits && event.payload.commits.length > 0) {
                     return event.payload.commits.map((commit: any) => ({
@@ -107,7 +62,7 @@ const SourceControlView = () => {
                 return [];
             }));
 
-            setCommits(results.flat());
+            setCommits(results.flat().slice(0, 15));
         } catch (err) {
             console.error(err);
             // Fallback mock data if API fails (or rate limited)

@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Files, Search, GitGraph, SquareDashedBottomCode, User, Settings, Palette } from 'lucide-react';
+import { Files, Search, GitGraph, SquareDashedBottomCode, User, Settings, Palette, Monitor } from 'lucide-react';
 import { useTheme } from '../providers/ThemeProvider';
 import { useState } from 'react';
 
@@ -13,9 +13,10 @@ interface ActivityBarProps {
   activeView?: string;
   setActiveView?: (view: string) => void;
   onShowCommandPalette?: (mode?: 'commands' | 'themes' | 'fonts') => void;
+  isMobile?: boolean;
 }
 
-const ActivityBar = ({ onToggleSidebar, isSidebarOpen, activeView, setActiveView, onShowCommandPalette }: ActivityBarProps) => {
+const ActivityBar = ({ onToggleSidebar, isSidebarOpen, activeView, setActiveView, onShowCommandPalette, isMobile = false }: ActivityBarProps) => {
   const { theme } = useTheme();
   const [showProfile, setShowProfile] = useState(false);
   const [showSearch, setShowSearch] = useState(false); // State for search modal
@@ -34,6 +35,10 @@ const ActivityBar = ({ onToggleSidebar, isSidebarOpen, activeView, setActiveView
 
   const handleExtensionsClick = () => {
     showToast("Extension Marketplace unavailable. Please upgrade to Portfolio Pro™ (Just kidding).", "warning");
+  };
+
+  const handleMonitorClick = () => {
+    showToast("View in PC browser for better experience", "info");
   };
 
   const handleSettingsClick = () => {
@@ -62,7 +67,7 @@ const ActivityBar = ({ onToggleSidebar, isSidebarOpen, activeView, setActiveView
       {showProfile && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm" onClick={() => setShowProfile(false)}>
           <div
-            className="bg-[var(--vscode-sidebar-bg)] border border-[var(--vscode-border)] shadow-2xl rounded-lg p-6 w-80 text-[var(--vscode-fg)] relative"
+            className="bg-[var(--vscode-sidebar-bg)] border border-[var(--vscode-border)] shadow-2xl rounded-lg p-6 w-80 max-w-[90vw] text-[var(--vscode-fg)] relative"
             onClick={(e) => e.stopPropagation()}
           >
             <button
@@ -104,7 +109,7 @@ const ActivityBar = ({ onToggleSidebar, isSidebarOpen, activeView, setActiveView
       <div id="activity-bar-container" className="w-12 h-full bg-[var(--vscode-activity-bar-bg)] flex flex-col items-center py-2 justify-between flex-shrink-0 z-20 border-r border-[var(--vscode-border)] transition-colors relative">
         <div className="flex flex-col gap-4">
           <div
-            className={`p-2 border-l-2 cursor-pointer hover:bg-[var(--vscode-hover)] transition-colors ${activeView === 'explorer' && isSidebarOpen ? 'border-[var(--vscode-fg)] opacity-100' : 'border-transparent opacity-60'}`}
+            className={`p-2 border-l-2 cursor-pointer hover:bg-[var(--vscode-hover)] transition-colors ${activeView === 'explorer' && (isSidebarOpen || isMobile) ? 'border-[var(--vscode-fg)] opacity-100' : 'border-transparent opacity-60'}`}
             onClick={() => {
               if (setActiveView) setActiveView('explorer');
               if (onToggleSidebar && (!isSidebarOpen || activeView === 'explorer')) onToggleSidebar();
@@ -116,7 +121,7 @@ const ActivityBar = ({ onToggleSidebar, isSidebarOpen, activeView, setActiveView
             <Files size={24} className="text-[var(--vscode-fg)]" />
           </div>
           <div
-            className={`p-2 border-l-2 cursor-pointer hover:bg-[var(--vscode-hover)] transition-colors ${activeView === 'search' && isSidebarOpen ? 'border-[var(--vscode-fg)] opacity-100' : 'border-transparent opacity-60'}`}
+            className={`p-2 border-l-2 cursor-pointer hover:bg-[var(--vscode-hover)] transition-colors ${activeView === 'search' && (isSidebarOpen || isMobile) ? 'border-[var(--vscode-fg)] opacity-100' : 'border-transparent opacity-60'}`}
             onClick={() => {
               if (setActiveView) setActiveView('search');
               if (onToggleSidebar && (!isSidebarOpen || activeView === 'search')) onToggleSidebar();
@@ -128,7 +133,7 @@ const ActivityBar = ({ onToggleSidebar, isSidebarOpen, activeView, setActiveView
             <Search size={24} className="text-[var(--vscode-fg)]" />
           </div>
           <div
-            className={`p-2 border-l-2 cursor-pointer hover:bg-[var(--vscode-hover)] transition-colors ${activeView === 'source-control' && isSidebarOpen ? 'border-[var(--vscode-fg)] opacity-100' : 'border-transparent opacity-60'}`}
+            className={`p-2 border-l-2 cursor-pointer hover:bg-[var(--vscode-hover)] transition-colors ${activeView === 'source-control' && (isSidebarOpen || isMobile) ? 'border-[var(--vscode-fg)] opacity-100' : 'border-transparent opacity-60'}`}
             onClick={() => {
               if (setActiveView) setActiveView('source-control');
               if (onToggleSidebar && (!isSidebarOpen)) onToggleSidebar();
@@ -139,7 +144,7 @@ const ActivityBar = ({ onToggleSidebar, isSidebarOpen, activeView, setActiveView
             <GitGraph size={24} className="text-[var(--vscode-fg)]" />
           </div>
           <div
-            className={`p-2 border-l-2 cursor-pointer hover:bg-[var(--vscode-hover)] transition-colors ${activeView === 'extensions' && isSidebarOpen ? 'border-[var(--vscode-fg)] opacity-100' : 'border-transparent opacity-60'}`}
+            className={`p-2 border-l-2 cursor-pointer hover:bg-[var(--vscode-hover)] transition-colors ${activeView === 'extensions' && (isSidebarOpen || isMobile) ? 'border-[var(--vscode-fg)] opacity-100' : 'border-transparent opacity-60'}`}
             onClick={() => {
               if (setActiveView) setActiveView('extensions');
               if (onToggleSidebar && (!isSidebarOpen)) onToggleSidebar();
@@ -152,6 +157,16 @@ const ActivityBar = ({ onToggleSidebar, isSidebarOpen, activeView, setActiveView
         </div>
 
         <div className="flex flex-col gap-4 mb-2">
+          {isMobile && (
+            <div
+              className="p-2 cursor-pointer hover:bg-[var(--vscode-hover)] opacity-60 hover:opacity-100"
+              onClick={handleMonitorClick}
+              title="View in PC"
+            >
+              <Monitor size={24} className="text-[var(--vscode-fg)]" />
+            </div>
+          )}
+
           {/* Theme Toggle */}
           <div
             className="p-2 cursor-pointer hover:bg-[var(--vscode-hover)] opacity-60 hover:opacity-100 relative group"

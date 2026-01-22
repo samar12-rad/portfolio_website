@@ -6,6 +6,8 @@ import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { TerminalProvider } from "@/components/providers/TerminalProvider";
 import { TabProvider } from '@/components/providers/TabProvider';
 import { SettingsProvider } from "@/components/providers/SettingsProvider";
+import VisitorTracker from "@/components/analytics/VisitorTracker";
+import { HighlightProvider } from "@/components/providers/HighlightProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -59,9 +61,12 @@ export default function RootLayout({
           <SettingsProvider>
             <TerminalProvider>
               <TabProvider>
-                <MainLayout>
-                  {children}
-                </MainLayout>
+                <VisitorTracker />
+                <HighlightProvider>
+                  <MainLayout>
+                    {children}
+                  </MainLayout>
+                </HighlightProvider>
               </TabProvider>
             </TerminalProvider>
           </SettingsProvider>

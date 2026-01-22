@@ -15,6 +15,7 @@ interface TabContextType {
     addTab: (path: string, name: string) => void;
     closeTab: (path: string) => void;
     setActiveTab: (path: string) => void;
+    reorderTabs: (newTabs: Tab[]) => void;
 }
 
 const TabContext = createContext<TabContextType | undefined>(undefined);
@@ -75,8 +76,12 @@ export function TabProvider({ children }: { children: React.ReactNode }) {
         }
     };
 
+    const reorderTabs = (newTabs: Tab[]) => {
+        setTabs(newTabs);
+    };
+
     return (
-        <TabContext.Provider value={{ tabs, activeTab, addTab, closeTab, setActiveTab }}>
+        <TabContext.Provider value={{ tabs, activeTab, addTab, closeTab, setActiveTab, reorderTabs }}>
             {children}
         </TabContext.Provider>
     );
